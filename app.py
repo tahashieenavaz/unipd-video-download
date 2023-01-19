@@ -1,9 +1,9 @@
 import os
-import shutil
 import re
+import shutil
 
-from glob import glob
 from sys import argv
+from glob import glob
 from threading import Thread
 from urllib.request import urlretrieve as download
 
