@@ -1,6 +1,5 @@
 import os
 import shutil
-from random import random
 from glob import glob
 from threading import Thread
 from urllib.request import urlretrieve as download
