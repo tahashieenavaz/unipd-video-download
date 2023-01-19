@@ -9,7 +9,6 @@ from urllib.request import urlretrieve as download
 
 onlyMerge = len(argv) > 1 and "merge" in argv[1]
 downloadsFolder = 'downloads'
-downloadedParts = []
 
 if not onlyMerge:
     url = input("Enter URL: ")
@@ -28,7 +27,7 @@ def main():
         print("Redownloading")
         downloadRest(latestId)
     mergeFiles()
-    os.rmdir(downloadsFolder)
+    shutil.rmtree(downloadsFolder)
     print("Done!")
 
 
@@ -52,7 +51,6 @@ def findLatestId():
             download(urlFor(id), f'./{downloadsFolder}/{id}.ts')
         except:
             break
-        downloadedParts.append(id)
         id += 50
 
     while True:
@@ -84,25 +82,37 @@ def replace(source: str, before: list, after: str):
     return source
 
 
+def extractNumber(target: str):
+    return re.findall(r"\d+", target)[0]
+
+
+def downloadedFiles():
+    return list(map(extractNumber, glob(f'./{downloadsFolder}/*.ts')))
+
+
 def downloadRest(biggest: int):
-    remaining = diff(list(range(1, biggest + 1)), downloadedParts)
+    remaining = diff(list(range(1, biggest + 1)), downloadedFiles())
     threads = []
     for i in remaining:
         print(i)
         fileAddress = f"./downloads/{i}.ts"
         if os.path.exists(fileAddress):
             continue
-        threads.append(Thread(target=download, args=(urlFor(i), fileAddress,)))
-        downloadedParts.append(i)
+        threads.append(Thread(target=downloadOrPass,
+                       args=(urlFor(i), fileAddress,)))
 
     for thread in threads:
         thread.start()
 
     for thread in threads:
-        try:
-            thread.join()
-        except:
-            pass
+        thread.join(timeout=10)
+
+
+def downloadOrPass(remoteAddress: str, localAddress: str):
+    try:
+        download(remoteAddress, localAddress)
+    except:
+        pass
 
 
 def diff(first: list, second: list):
