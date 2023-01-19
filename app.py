@@ -62,8 +62,7 @@ def findLatestId():
 
 def mergeFiles():
     parts = glob(f"./{downloadsFolder}/*.ts")
-    parts.sort(key=lambda x: int(
-        replace(x, ['.', '/', 'downloads', 'ts'], '')))
+    parts.sort(key=lambda x: extractNumber(x))
 
     with open('./merged.ts', 'wb') as mergedHandler:
         for part in parts:
@@ -78,7 +77,7 @@ def replace(source: str, before: list, after: str):
 
 
 def extractNumber(target: str):
-    return re.findall(r"\d+", target)[0]
+    return int(re.findall(r"\d+", target)[0])
 
 
 def downloadedFiles():
