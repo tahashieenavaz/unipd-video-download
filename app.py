@@ -17,7 +17,10 @@ def main():
 
     latestId = findLatestId() 
     downloadRest(latestId)
+
     mergeFiles()
+
+    os.rmdir(downloadsFolder)
 
     print("Done!")
         
