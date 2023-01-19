@@ -81,9 +81,10 @@ def downloadRest(biggest: int):
     for thread in threads:
         thread.join()
 
-    def diff(first: list, second: list):
-        second = set(second)
-        return [x for x in first if x not in second]
+
+def diff(first: list, second: list):
+    second = set(second)
+    return [x for x in first if x not in second]
 
 
 if __name__ == '__main__':
