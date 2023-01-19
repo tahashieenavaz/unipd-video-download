@@ -22,9 +22,7 @@ def main():
         mergeFiles()
         return True
 
-    if not os.path.exists(f'./{downloadsFolder}'):
-        os.mkdir(downloadsFolder)
-
+    restartEnv()
     latestId = findLatestId()
     while len(glob(f"./{downloadsFolder}/*.ts")) < latestId:
         print("Redownloading")
@@ -36,6 +34,14 @@ def main():
 
 def urlFor(id: int):
     return url.replace("#TSID#", str(id))
+
+
+def restartEnv():
+    if os.path.exists(f'./{downloadsFolder}'):
+        shutil.rmtree(downloadsFolder)
+    if os.path.exists('./merged.ts'):
+        os.remove('./merged.ts')
+    os.mkdir(downloadsFolder)
 
 
 def findLatestId():
@@ -88,6 +94,7 @@ def downloadRest(biggest: int):
             continue
         threads.append(Thread(target=download, args=(
             urlFor(i), fileAddress,)))
+        downloadedParts.append(i)
 
     for thread in threads:
         thread.start()
