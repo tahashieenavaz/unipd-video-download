@@ -36,10 +36,8 @@ def urlFor(id: int):
 
 
 def restartEnv():
-    if os.path.exists(f'./{downloadsFolder}'):
-        shutil.rmtree(downloadsFolder)
-    if os.path.exists('./merged.ts'):
-        os.remove('./merged.ts')
+    os.path.exists(f'./{downloadsFolder}') and shutil.rmtree(downloadsFolder)
+    os.path.exists('./merged.ts') and os.remove('./merged.ts')
     os.mkdir(downloadsFolder)
 
 
