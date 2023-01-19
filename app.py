@@ -74,12 +74,12 @@ def extractNumber(target: str):
     return int(re.findall(r"\d+", target)[0])
 
 
-def downloadedFiles():
+def downloadedFilesIds():
     return list(map(extractNumber, glob(f'./{downloadsFolder}/*.ts')))
 
 
 def downloadRest(biggest: int):
-    remaining = diff(list(range(1, biggest + 1)), downloadedFiles())
+    remaining = diff(list(range(1, biggest + 1)), downloadedFilesIds())
     threads = []
     for i in remaining:
         print(i)
