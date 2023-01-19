@@ -70,12 +70,6 @@ def mergeFiles():
                 shutil.copyfileobj(partHandler, mergedHandler)
 
 
-def replace(source: str, before: list, after: str):
-    for a in before:
-        source = source.replace(a, after)
-    return source
-
-
 def extractNumber(target: str):
     return int(re.findall(r"\d+", target)[0])
 
