@@ -93,7 +93,10 @@ def downloadRest(biggest: int):
         thread.start()
 
     for thread in threads:
-        thread.join()
+        try:
+            thread.join()
+        except:
+            pass
 
 
 def diff(first: list, second: list):
