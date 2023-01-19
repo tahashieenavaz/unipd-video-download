@@ -82,7 +82,6 @@ def downloadRest(biggest: int):
     remaining = diff(list(range(1, biggest + 1)), downloadedFilesIds())
     threads = []
     for i in remaining:
-        print(i)
         fileAddress = f"./downloads/{i}.ts"
         if os.path.exists(fileAddress):
             continue
