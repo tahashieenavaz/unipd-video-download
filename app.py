@@ -3,23 +3,32 @@ import shutil
 import re
 
 from glob import glob
+from sys import argv
 from threading import Thread
 from urllib.request import urlretrieve as download
 
+onlyMerge = len(argv) > 1 and "merge" in argv[1]
 downloadsFolder = 'downloads'
 downloadedParts = []
 
-url = input("Enter URL: ")
-targetTag = "#TSID#"
-url = re.sub(r"seg-\d+-", f"seg-#TSID#-", url)
+if not onlyMerge:
+    url = input("Enter URL: ")
+    targetTag = "#TSID#"
+    url = re.sub(r"seg-\d+-", f"seg-#TSID#-", url)
 
 
 def main():
+    if onlyMerge:
+        mergeFiles()
+        return True
+
     if not os.path.exists(f'./{downloadsFolder}'):
         os.mkdir(downloadsFolder)
 
     latestId = findLatestId()
-    downloadRest(latestId)
+    while len(glob(f"./{downloadsFolder}/*.ts")) < latestId:
+        print("Redownloading")
+        downloadRest(latestId)
     mergeFiles()
     os.rmdir(downloadsFolder)
     print("Done!")
@@ -74,8 +83,11 @@ def downloadRest(biggest: int):
     threads = []
     for i in remaining:
         print(i)
+        fileAddress = f"./downloads/{i}.ts"
+        if os.path.exists(fileAddress):
+            continue
         threads.append(Thread(target=download, args=(
-            urlFor(i), f"./downloads/{i}.ts",)))
+            urlFor(i), fileAddress,)))
 
     for thread in threads:
         thread.start()
