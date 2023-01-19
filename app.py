@@ -54,10 +54,7 @@ def findLatestId():
     while True:
         id -= 1
         fileAddress = f'./{downloadsFolder}/{id}.ts'
-        try:
-            download(urlFor(id), fileAddress)
-        except:
-            pass
+        downloadOrPass(urlFor(id), fileAddress)
         if os.path.exists(fileAddress):
             break
     return id
