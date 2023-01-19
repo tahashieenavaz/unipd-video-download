@@ -92,8 +92,7 @@ def downloadRest(biggest: int):
         fileAddress = f"./downloads/{i}.ts"
         if os.path.exists(fileAddress):
             continue
-        threads.append(Thread(target=download, args=(
-            urlFor(i), fileAddress,)))
+        threads.append(Thread(target=download, args=(urlFor(i), fileAddress,)))
         downloadedParts.append(i)
 
     for thread in threads:
